@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easy.system.dao.SysResourceDao">
+
+    <sql id="tableName">
+        sys_resource
+    </sql>
+
+    <sql id="column">
+        id,
+        menu_id,
+        title,
+        permission_code,
+        url,
+        `status`,
+        type,
+        deleted,
+        create_date,
+        update_date
+    </sql>
+
+    <sql id="save">
+        (
+            id,
+            menu_id,
+            title,
+            permission_code,
+            url,
+            `status`,
+            type,
+            create_date
+        )values(
+            #{id},
+            #{menuId},
+            #{title},
+            #{permissionCode},
+            #{url},
+            #{status},
+            #{type},
+            #{createDate}
+        )
+
+    </sql>
+
+    <sql id="update">
+        <set>
+            <if test="menuId!=null and menuId !=''" > menu_id=#{menuId},</if>
+            <if test="title!=null and title !=''" > title=#{title},</if>
+            <if test="permissionCode!=null and permissionCode !=''" >permission_code=#{permissionCode},</if>
+            <if test="url!=null and url !=''" > url=#{url},</if>
+            <if test="status!=null and status !=''" >status=#{status},</if>
+            <if test="type!=null and type !=''" > type=#{type},</if>
+            <if test="status!=null and status !=''" > status=#{status},</if>
+        </set>
+
+    </sql>
+
+    <select id="listAll" resultType="com.easy.common.entity.system.SysResource">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            deleted!=1
+            <if test="menuId!=null and menuId!=''">and menu_id=#{menuId}</if>
+            <if test="title!=null and title!=''">and title=#{title}</if>
+            <if test="permissionCode!=null and t.permissionCode!=''">and permission_code=#{permissionCode}</if>
+            <if test="url!=null and url!=''"> and url=#{url}</if>
+            <if test="status!=null and status!=''">and `status`=#{status}</if>
+            <if test="type!=null and type!=''">and `type`=#{type}</if>
+        </where>
+
+    </select>
+
+    <select id="list" resultType="com.easy.common.entity.system.SysResource">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="t.menuId!=null and t.menuId!=''">and menu_id=#{t.menuId}</if>
+            <if test="t.title!=null and t.title!=''">and title=#{t.title}</if>
+            <if test="t.permissionCode!=null and t.permissionCode!=''">and permission_code=#{t.permissionCode}</if>
+            <if test="t.url!=null and t.url!=''">and url=#{t.url}</if>
+            <if test="t.status!=null and t.status!=''">and `status`=#{t.status}</if>
+            <if test="t.type!=null and t.type!=''">and `type`=#{t.type}</if>
+            <if test="t.deleted!=null and t.deleted!=''"> and deleted=#{t.deleted}</if>
+        </where>
+
+    </select>
+
+
+    <select id="listByRoleIds" resultType="com.easy.common.entity.system.SysResource">
+        select
+        <include refid="column"></include>
+
+        from
+        <include refid="tableName"></include>
+        where   id in
+        (
+            select
+            resource_id as id  from
+            sys_role_resource rs
+            where rs.role_id in
+            <foreach collection="roleIds" item="id"  open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        )
+    </select>
+
+    <select id="listByRoleIdsWithType" resultType="com.easy.common.entity.system.SysResource">
+        select
+        <include refid="column"></include>
+
+        from
+        <include refid="tableName"></include>
+        where  type=#{type} and id in
+        (
+        select
+        resource_id as id  from
+        sys_role_resource rs
+        where rs.role_id in
+        <foreach collection="roleIds" item="id"  open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+
+
+    <select id="get" resultType="com.easy.common.entity.system.SysResource">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+         where id=#{id}
+    </select>
+
+
+
+    <insert id="save" parameterType="com.easy.common.entity.system.SysResource">
+        insert into
+        <include refid="tableName"></include>
+        <include refid="save"></include>
+    </insert>
+
+    <update id="update" parameterType="com.easy.common.entity.system.SysResource">
+        update
+        <include refid="tableName"></include>
+        <include refid="update"></include>
+        where id=#{id}
+    </update>
+
+
+    <delete id="delete">
+        update
+        <include refid="tableName"></include>
+        set deleted=1 where id=#{id}
+    </delete>
+</mapper>

@@ -1,0 +1,6 @@
+server:
+  port: 8112
+
+spring:
+  application:
+    name: ierp-redis

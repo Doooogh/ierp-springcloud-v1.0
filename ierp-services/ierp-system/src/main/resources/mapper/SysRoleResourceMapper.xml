@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easy.system.dao.SysRoleResourceDao">
+
+    <sql id="tableName">
+        sys_role_resource
+    </sql>
+
+    <sql id="column">
+        id,
+        role_id,
+        resource_id
+    </sql>
+
+    <sql id="save">
+        (
+            id,
+            role_id,
+            resource_id
+        )values(
+           #{id},
+            #{roleId},
+            #{resourceId}
+
+        )
+
+    </sql>
+
+    <sql id="update">
+        <set>
+            <if test="roleId!=null and roleId!=''"> role_id=#{roleId},</if>
+            <if test="resourceId!=null and resourceId!=''"> resource_id=#{resourceId},</if>
+        </set>
+    </sql>
+
+
+
+
+    <select id="listAll" resultType="com.easy.common.entity.system.SysRoleResource">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="roleId!=null and roleId!=''">and role_id=#{roleId}</if>
+            <if test="resourceId!=null and resourceId!=''">and resource_id=#{resourceId}</if>
+        </where>
+
+    </select>
+
+    <select id="list" resultType="com.easy.common.entity.system.SysRoleResource">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="t.roleId!=null and t.roleId!=''">and role_id=#{t.roleId}</if>
+            <if test="t.resourceId!=null and t.resourceId!=''">and resource_id=#{t.resourceId}</if>
+        </where>
+
+    </select>
+
+    <delete id="batchDelete">
+        delete
+        <include refid="tableName"></include>
+        where id in
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findIdsByRoleId" parameterType="long" resultType="long">
+        select
+        id
+        from
+        <include refid="tableName"></include>
+        where role_id=#{roleId}
+    </select>
+
+
+
+</mapper>

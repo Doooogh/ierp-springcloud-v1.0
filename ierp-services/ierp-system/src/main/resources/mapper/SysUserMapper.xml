@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easy.system.dao.SysUserDao">
+
+    <sql id="tableName">
+        sys_user
+    </sql>
+
+    <sql id="column">
+        id,
+        username,
+        password,
+        `name`,
+        identity,
+        sex,
+        email,
+        id_card,
+        phone,
+        `status`,
+        client_id,
+        create_date,
+        update_date
+    </sql>
+
+    <sql id="save">
+        (
+        id,
+        username,
+        password,
+        `name`,
+        identity,
+        sex,
+        email,
+        id_card,
+        phone,
+        `status`,
+        client_id,
+        create_date
+        )
+        values (
+        #{id},
+        #{username},
+        #{password},
+        #{name},
+        #{identity},
+        #{sex},
+        #{email},
+        #{idCard},
+        #{phone},
+        #{status},
+        #{clientId},
+        #{createDate}
+        )
+    </sql>
+
+    <sql id="update">
+            <set>
+                <if test="username!=null and username!=''">  username=#{username},</if>
+                <if test="password!=null and password!=''"> password=#{password},</if>
+                <if test="name!=null and name!=''"> name=#{name},</if>
+                <if test="identity!=null and identity!=''"> identity=#{identity},</if>
+                <if test="sex!=null and sex!=''"> sex=#{sex},</if>
+                <if test="email!=null and email!=''"> email=#{email},</if>
+                <if test="idCard!=null and idCard!=''"> id_card=#{idCard},</if>
+                <if test="phone!=null and phone!=''"> phone=#{phone},</if>
+                <if test="status!=null and status!=''"> `status`=#{status},</if>
+            </set>
+
+    </sql>
+
+
+
+
+    <select id="list" resultType="com.easy.common.entity.system.SysUser">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="t.username!=null and t.username!=''">and  username=#{t.username}</if>
+            <if test="t.password!=null and t.password!=''">and password=#{t.password}</if>
+            <if test="t.name!=null and t.name!=''">and name=#{t.name}</if>
+            <if test="t.identity!=null and t.identity!=''">and identity=#{t.identity}</if>
+            <if test="t.sex!=null and t.sex!=''">and sex=#{t.sex}</if>
+            <if test="t.email!=null and t.email!=''">and email=#{t.email}</if>
+            <if test="t.idCard!=null and t.idCard!=''">and id_card=#{t.idCard}</if>
+            <if test="t.phone!=null and t.phone!=''">and phone=#{t.phone}</if>
+            <if test="t.status!=null and t.status!=''">and `status`=#{t.status}</if>
+        </where>
+    </select>
+
+    <select id="get" resultType="com.easy.common.entity.system.SysUser">
+        select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+         where id=#{id}
+    </select>
+
+    <select id="findByUsername"  resultType="com.easy.common.entity.system.SysUser">
+         select
+        <include refid="column"></include>
+        from
+        <include refid="tableName"></include>
+         where username=#{username}
+    </select>
+    <insert id="save" parameterType="com.easy.common.entity.system.SysUser">
+        insert into
+        <include refid="tableName"></include>
+        <include refid="save"></include>
+    </insert>
+
+    <update id="update" parameterType="com.easy.common.entity.system.SysUser">
+        update
+        <include refid="tableName"></include>
+        <include refid="update"></include>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        update
+        <include refid="tableName"></include>
+        set deleted=1 where id=#{id}
+    </delete>
+</mapper>

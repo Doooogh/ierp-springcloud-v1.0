@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://www.doooogh.com:8848
+        namespace: ba6cffcb-364c-47ae-85af-2f9f1823b738
+        group: IERP-DEV-GROUP
+      config:
+        server-addr: http://www.doooogh.com:8848
+        namespace: ba6cffcb-364c-47ae-85af-2f9f1823b738
+        group: IERP-DEV-GROUP
+        file-extension: yaml
+
+logging:
+  level:
+    root: info
